@@ -14,5 +14,5 @@ jobs:
 
       - uses: dbelyaev/action-checkstyle@v3
         with:
-          checkstyle_version: 'latest' 
+          checkstyle_version: 10.21.0 
           github_token: ${{ secrets.GITHUB_TOKEN }}
