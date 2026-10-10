@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk AS builder
+FROM maven:3.9-eclipse-temurin AS builder
 
 WORKDIR /app
 
@@ -6,12 +6,11 @@ COPY . .
 
 RUN mvn clean install -DskipTests
 
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
 COPY --from=builder /app/target/*.jar app.jar
-COPY . .
 
 EXPOSE 8080
 
