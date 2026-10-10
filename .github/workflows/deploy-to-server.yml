@@ -20,7 +20,27 @@ jobs:
             sudo apt-get update
             sudo apt-get install docker docker-compose-v2 -y
             sudo usermod -aG docker $USER
-            mkdir -p devops
+            mkdir -p bankapp
+
+      - name: Copy docker-compose file to remote server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: docker-compose.yml
+          target: ~/bankapp
+
+      - name: docker compose deploy via ssh on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            export DOCKERHUB_USER=${{vars.DOCKERHUB_USER}}
+            cd bankapp
+            docker compose down -v && docker compose up --build -d --force-recreate
 
 
       
