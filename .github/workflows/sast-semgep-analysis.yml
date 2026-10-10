@@ -12,6 +12,10 @@ jobs:
       - name: code checkout 
         uses: actions/checkout@v5
 
+
+      - name: Install Semgrep
+        run: pip install semgrep
+        
       - name: Perform Semgrep Analysis
         run: semgrep scan -q --sarif --config auto . > semgrep-results.sarif
 
