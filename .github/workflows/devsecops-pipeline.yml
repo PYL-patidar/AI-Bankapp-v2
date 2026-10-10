@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/sast-semgep-analysis.yml
 
   secrets-scan:
-    uses: ./github/workflows/secrets-scan.yml
+    uses: ./.github/workflows/secrets-scan.yml
     secrets: inherit
   
   dependency-scan:
