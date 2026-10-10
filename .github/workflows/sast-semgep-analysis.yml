@@ -16,7 +16,7 @@ jobs:
         run: semgrep scan -q --sarif --config auto ./vulnerable-source-code > semgrep-results.sarif
 
       - name: Save SARIF results as an artifect
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: semgrep-scan-results
           path: semgrep-results.sarif
