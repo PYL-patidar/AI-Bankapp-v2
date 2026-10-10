@@ -1,0 +1,28 @@
+# SAST code securtiy scan for java --> Semgrep
+
+name: Semgrep SAST
+
+on:
+  workflow_call:
+
+jobs:
+  semgrep-sast:
+    runs-on: ubuntu-latest
+    stpes:
+      - name: code checkout 
+        uses: actions/checkout@v5
+
+      - name: Perform Semgrep Analysis
+        run: semgrep scan -q --sarif --config auto ./vulnerable-source-code > semgrep-results.sarif
+
+      - name: Save SARIF results as an artifect
+        uses: actions/upload-artifact@v3
+        with:
+          name: semgrep-scan-results
+          path: semgrep-results.sarif
+
+      - name: Upload SARIF result to the Github Security dashboard
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: semgrep-results.sarif
+        if: always()
