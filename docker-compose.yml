@@ -20,7 +20,7 @@ services:
       - bankapp-nw
   
   bankapp:
-    image: ${DOCKERHUB_USER}/bankapp-v2:${github.sha}
+    image: ${DOCKERHUB_USER}/bankapp-v2:${IMAGE_TAG:-latest}
     container_name: bankapp-cont
     ports:
       - "8080:8080"

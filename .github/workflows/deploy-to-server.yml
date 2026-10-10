@@ -39,6 +39,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             export DOCKERHUB_USER=${{vars.DOCKERHUB_USER}}
+            export IMAGE_TAG=${{github.sha}}
             cd bankapp
             docker compose down -v && docker compose up --build -d --force-recreate
 
