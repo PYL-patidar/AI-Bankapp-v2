@@ -17,5 +17,5 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ${{DOCKERHUB_USER}}/bankapp-v2:${{github.sha}}
+          image-ref: ${{vars.DOCKERHUB_USER}}/bankapp-v2:${{github.sha}}
           severity: 'CRITICAL,HIGH'
