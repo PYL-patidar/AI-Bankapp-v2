@@ -16,3 +16,6 @@ jobs:
         with:
           checkstyle_version: 10.21.0 
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-check
+          filter_mode: nofilter
+          level: error
