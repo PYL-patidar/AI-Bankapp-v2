@@ -8,7 +8,7 @@ on:
 jobs:
   semgrep-sast:
     runs-on: ubuntu-latest
-    stpes:
+    steps:
       - name: code checkout 
         uses: actions/checkout@v5
 
