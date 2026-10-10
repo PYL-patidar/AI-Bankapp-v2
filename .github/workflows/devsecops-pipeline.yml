@@ -1,0 +1,46 @@
+name: DevSecOps pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  # CI part
+  code-quality:
+    uses: ./.github/workflows/code-quality.yml
+    secrets: inherit
+
+  sast-semgrep:
+    uses: ./.github/workflows/sast-semgep-analysis.yml
+
+  secrets-scan:
+    uses: ./github/workflows/secrets-scan.yml
+    secrets: inherit
+  
+  dependency-scan:
+    uses: ./.github/workflows/dependency-scan.yml
+
+  dockerfile-scan:
+    needs: [code-quality, sast-semgrep, secrets-scan, dependency-scan]
+    uses: ./.github/workflows/Dockerfile-scan.yml
+
+  build-and-push:
+    needs: [dockerfile-scan]
+    uses: ./.github/workflows/build-and-push.yml
+    secrets: inherit
+
+  image-scan:
+    needs: [build-and-push]
+    uses: ./.github/workflows/image-scan.yml
+    secrets: inherit
+
+  deploy:
+    needs: [image-scan]
+    uses: ./.github/workflows/deploy-to-server
+    secrets: inherit
+
+  
+
+
+  
