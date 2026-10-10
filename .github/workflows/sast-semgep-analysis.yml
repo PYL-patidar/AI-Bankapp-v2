@@ -5,14 +5,14 @@ name: Semgrep SAST
 on:
   workflow_call:
 
-permissions:
-  contents: read
-  security-events: write
-  actions: read 
 
 jobs:
   semgrep-sast:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - name: code checkout 
         uses: actions/checkout@v5
