@@ -40,6 +40,11 @@ jobs:
     uses: ./.github/workflows/deploy-to-server.yml
     secrets: inherit
 
+  dast-test:
+    needs: [deploy]
+    uses: ./.github/workflows/dast-owasp-zap.yml
+    
+
   
 
 

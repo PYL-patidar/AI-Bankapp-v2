@@ -1,3 +1,6 @@
+# SCA(software composition analysis) scan third-party librariries 
+# and here maven is dependency and third party libr. which is responsible for java code compile and save in .jar
+# with --> OWASP dependecy scan 
 name: SCA-OWASP dependency scan 
 
 on:
