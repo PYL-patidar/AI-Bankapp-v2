@@ -1,0 +1,73 @@
+# bankapp ki deployment
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bankapp-deployment
+  namespace: bankapp
+  labels:
+    app: bankapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: bankapp
+  template:
+    metadata:
+      labels:
+        app: bankapp
+    spec:
+      initContainers:
+        - name: wait-for-mysql
+          image: busybox:latest
+          command: ["/bin/sh", "-c", "until nc -z mysql-service 3306; do sleep 2; done"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 100M
+              memory: 64Mi
+        - name: wait-for-ollama
+          image: busybox:latest
+          command: ["/bin/sh", "-c", "until nc -z ollama-service 11434; do sleep 2; done"]
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 100M
+              memory: 64Mi
+      containers:
+        - name: bankapp
+          image: ai-bankapp:latest 
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: bankapp-configmap
+            - secretRef:
+                name: bankapp-secrets
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+              httpGet:
+                path: /actuator/health
+                port: 8080
+              initialDelaySeconds: 30
+              failureThreshold: 15
+          livenessProbe:
+              httpGet:
+                path: /actuator/health
+                port: 8080
+              initialDelaySeconds: 60
+              periodSeconds: 10
+              failureThreshold: 5
+
+

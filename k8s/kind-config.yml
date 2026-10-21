@@ -1,0 +1,19 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: kind-cluster
+
+nodes:
+
+- role: control-plane
+  image: kindest/node:v1.35.1
+  extraPortMappings:
+    - protocol: TCP
+      containerPort: 30950 # jo nodes ka port rhega jo service me bhi same rhega
+      hostPort: 8000 # host ka port jisse external traffic accecss hoga 
+ 
+- role: worker
+  image: kindest/node:v1.35.1
+
+- role: worker
+  image: kindest/node:v1.35.1
+

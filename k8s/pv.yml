@@ -1,0 +1,37 @@
+# create a volume on cluster 
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+  namespace: bankapp
+
+spec:
+  capacity:
+    storage: 3Gi
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  hostPath:
+    path: /mnt/mysql-data
+
+---
+
+# ollama volume pv
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ollama-pv
+  namespace: bankapp
+
+spec:
+  capacity:
+    storage: 3Gi
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  hostPath:
+    path: /mnt/ollama-data
