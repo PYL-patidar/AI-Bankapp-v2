@@ -33,6 +33,7 @@ jobs:
     uses: ./.github/workflows/image-scan.yml
     secrets: inherit
 
+  # CD Part
   deploy:
     needs: [image-scan]
     uses: ./.github/workflows/deploy-to-server.yml
