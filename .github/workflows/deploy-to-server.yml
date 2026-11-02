@@ -20,16 +20,39 @@ jobs:
             sudo apt-get update
             sudo apt-get install docker docker-compose-v2 -y
             sudo usermod -aG docker $USER
-            mkdir -p bankapp
 
-      - name: Copy docker-compose file to remote server
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: docker-compose.yml
-          target: ~/bankapp
+            # installing kind
+            [ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-amd64
+            chmod +x ./kind
+            sudo mv ./kind /usr/local/bin/kind 
+
+            # installing kubectl 
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+            git clone https://github.com/PYL-patidar/AI-Bankapp-v2.git
+
+            cd AI-Bankapp-v2/
+
+            kind create cluster --name bankapp --config kind-config.yml
+            kubectl get nodes
+
+            echo "Checking Deployment"
+            kubectl apply -f k8s/ 
+
+            echo "Deployment completed successfully!"
+
+
+
+      #- name: Copy docker-compose file to remote server
+      #  uses: appleboy/scp-action@v1
+      #  with:
+      #    host: ${{ secrets.SSH_HOST }}
+      #    username: ${{ secrets.SSH_USER }}
+      #    key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #    source: docker-compose.yml
+      #    target: ~/bankapp
 
       - name: docker compose deploy via ssh on server
         uses: appleboy/ssh-action@v1.0.3
