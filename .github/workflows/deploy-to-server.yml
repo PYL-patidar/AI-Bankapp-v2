@@ -54,17 +54,17 @@ jobs:
       #    source: docker-compose.yml
       #    target: ~/bankapp
 
-      - name: docker compose deploy via ssh on server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            export DOCKERHUB_USER=${{vars.DOCKERHUB_USER}}
-            export IMAGE_TAG=${{github.sha}}
-            cd bankapp
-            docker compose down -v && docker compose up --build -d --force-recreate
+      #- name: docker compose deploy via ssh on server
+      #  uses: appleboy/ssh-action@v1.0.3
+      #  with:
+      #    host: ${{ secrets.SSH_HOST }}
+      #    username: ${{ secrets.SSH_USER }}
+      #    key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #    script: |
+      #      export DOCKERHUB_USER=${{vars.DOCKERHUB_USER}}
+      #      export IMAGE_TAG=${{github.sha}}
+      #     cd bankapp
+      #     docker compose down -v && docker compose up --build -d --force-recreate
 
 
       
