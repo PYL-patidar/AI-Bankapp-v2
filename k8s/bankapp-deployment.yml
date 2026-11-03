@@ -40,7 +40,7 @@ spec:
               memory: 64Mi
       containers:
         - name: bankapp
-          image: dockeradmin3011/ai-bankapp:latest
+          image: dockeradmin3001/ai-bankapp:latest
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8080
