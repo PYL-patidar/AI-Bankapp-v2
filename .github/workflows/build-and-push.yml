@@ -22,7 +22,7 @@ jobs:
           context: .
           push: true
           tags: |
-              ${{vars.DOCKERHUB_USER}}/bankapp-v2:${{github.sha}}
-              ${{vars.DOCKERHUB_USER}}/bankapp-v2:${{github.ref_name}}
-              ${{vars.DOCKERHUB_USER}}/bankapp-v2:latest
+              ${{vars.DOCKERHUB_USER}}/ai-bankapp:${{github.sha}}
+              ${{vars.DOCKERHUB_USER}}/ai-bankapp:${{github.ref_name}}
+              ${{vars.DOCKERHUB_USER}}/ai-bankapp:latest
  

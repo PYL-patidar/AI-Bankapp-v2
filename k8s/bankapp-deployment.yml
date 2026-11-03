@@ -40,7 +40,7 @@ spec:
               memory: 64Mi
       containers:
         - name: bankapp
-          image: dockeradmin3011/bankapp-v2:latest
+          image: dockeradmin3011/ai-bankapp:latest
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8080
@@ -69,5 +69,3 @@ spec:
               initialDelaySeconds: 60
               periodSeconds: 10
               failureThreshold: 5
-
-
