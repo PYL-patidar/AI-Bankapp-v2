@@ -1,0 +1,6 @@
+[allowlist]
+description = "Ignore approved dummy Kubernetes secret manifest"
+
+paths = [
+    '''k8s/secrets-example.yaml'''
+]
