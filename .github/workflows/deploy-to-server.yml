@@ -32,6 +32,9 @@ jobs:
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
             sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
+            kind --version
+            kubectl version
+
             git clone https://github.com/PYL-patidar/AI-Bankapp-v2.git
 
             cd AI-Bankapp-v2/
@@ -39,7 +42,8 @@ jobs:
             kind create cluster --name bankapp --config kind-config.yml
             kubectl get nodes
 
-            echo "Checking Deployment"
+            echo "Appling Deployment"
+            
             kubectl apply -f k8s/ 
 
             echo "Deployment completed successfully!"
