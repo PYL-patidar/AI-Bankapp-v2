@@ -18,60 +18,59 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             sudo apt-get update
-            sudo apt-get install docker.io
+            sudo apt-get install docker.io docker-compose-v2 -y
             sudo usermod -aG docker $USER
             newgrp docker
+            mkdir -p bankapp
 
             # installing kind
-            [ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-amd64
-            chmod +x ./kind
-            sudo mv ./kind /usr/local/bin/kind 
+            #[ $(uname -m) = x86_64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-amd64
+            #chmod +x ./kind
+            #sudo mv ./kind /usr/local/bin/kind 
 
             # installing kubectl 
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
-            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+            #curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            #curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
+            #sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-            kind --version
-            kubectl version
+            #kind --version
+            #kubectl version
 
-            git clone https://github.com/PYL-patidar/AI-Bankapp-v2.git
+            #git clone https://github.com/PYL-patidar/AI-Bankapp-v2.git
 
-            cd AI-Bankapp-v2/
+            #cd AI-Bankapp-v2/
 
-            kind create cluster --name bankapp --config kind-config.yml
-            kubectl get nodes
+            #kind create cluster --name bankapp --config kind-config.yml
+            #kubectl get nodes
 
-            echo "Appling Deployment"
+            #echo "Appling Deployment"
             
-            kubectl apply -f k8s/namespace.yml
-            sleep 5
-            kubectl apply -f k8s/ 
+            #kubectl apply -f k8s/namespace.yml
+            #sleep 5
+            #kubectl apply -f k8s/ 
 
-            echo "Deployment completed successfully!"
+            #echo "Deployment completed successfully!"
 
+      - name: Copy docker-compose file to remote server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: docker-compose.yml
+          target: ~/bankapp
 
-
-      #- name: Copy docker-compose file to remote server
-      #  uses: appleboy/scp-action@v1
-      #  with:
-      #    host: ${{ secrets.SSH_HOST }}
-      #    username: ${{ secrets.SSH_USER }}
-      #    key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #    source: docker-compose.yml
-      #    target: ~/bankapp
-
-      #- name: docker compose deploy via ssh on server
-      #  uses: appleboy/ssh-action@v1.0.3
-      #  with:
-      #    host: ${{ secrets.SSH_HOST }}
-      #    username: ${{ secrets.SSH_USER }}
-      #    key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #    script: |
-      #      export DOCKERHUB_USER=${{vars.DOCKERHUB_USER}}
-      #      export IMAGE_TAG=${{github.sha}}
-      #     cd bankapp
-      #     docker compose down -v && docker compose up --build -d --force-recreate
+      - name: docker compose deploy via ssh on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            export DOCKERHUB_USER=${{vars.DOCKERHUB_USER}}
+            export IMAGE_TAG=${{github.sha}}
+            cd bankapp
+            docker compose down -v && docker compose up --build -d --force-recreate
 
 
       
